@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import WebSocketClient from './WebSocketClient';
 
-const App = () => {
-  const [messages, setMessages] = useState([]); // State to store messages
-  const [socket, setSocket] = useState(null);  // State to store WebSocket instance
-  const [messageInput, setMessageInput] = useState(''); // State to manage message input
+const ChatRoom = () => {
+  const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
+  const [messageInput, setMessageInput] = useState('');
 
   useEffect(() => {
     // Create a WebSocket connection when component mounts
@@ -17,11 +17,10 @@ const App = () => {
 
     // Event listener for incoming messages
     ws.onmessage = (message) => {
-      const incomingMessage = JSON.parse(message.data);
-      console.log('Received:', incomingMessage);
+      console.log('Received:', message);
 
       // Update state with the received message
-      setMessages((prevMessages) => [...prevMessages, incomingMessage]);
+      setMessages(prevMessages => [...prevMessages, message]);
     };
 
     // Set the WebSocket instance to state
@@ -33,7 +32,6 @@ const App = () => {
     };
   }, []);
 
-  // Function to handle sending messages
   const sendMessage = () => {
     if (messageInput.trim() !== '') {
       const newMessage = {
@@ -46,7 +44,7 @@ const App = () => {
       console.log('Sent:', newMessage);
 
       // Update state with the sent message
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setMessages(prevMessages => [...prevMessages, newMessage]);
 
       // Clear message input field
       setMessageInput('');
@@ -78,7 +76,7 @@ const App = () => {
         />
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-          onClick={sendMessage}
+          onClick={sendMessage} // Ensure this is correctly bound
         >
           Send
         </button>
@@ -87,4 +85,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default ChatRoom;
